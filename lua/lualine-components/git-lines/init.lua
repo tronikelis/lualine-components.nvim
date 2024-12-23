@@ -52,8 +52,12 @@ function M:parse_git_diff()
 				local line_added, line_removed = line:match(".-(%d+).-(%d+)")
 
 				files_changed = files_changed + 1
-				added = added + tonumber(line_added)
-				removed = removed + tonumber(line_removed)
+				if line_added then
+					added = added + tonumber(line_added)
+				end
+				if line_removed then
+					removed = removed + tonumber(line_removed)
+				end
 			end
 
 			self.data = {
