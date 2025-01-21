@@ -35,7 +35,7 @@ function M:parse_git_diff()
 			"--no-pager",
 			"--no-optional-locks",
 			"diff",
-			"--numstat",
+			"--shortstat",
 			"--no-color",
 			"--no-ext-diff",
 			unpack(self.options.diff_args),
@@ -47,18 +47,10 @@ function M:parse_git_diff()
 				return
 			end
 
-			local files_changed, added, removed = 0, 0, 0
-			for _, line in ipairs(vim.split(out.stdout, "\n", { trimempty = true })) do
-				local line_added, line_removed = line:match(".-(%d+).-(%d+)")
-
-				files_changed = files_changed + 1
-				if line_added then
-					added = added + tonumber(line_added)
-				end
-				if line_removed then
-					removed = removed + tonumber(line_removed)
-				end
-			end
+			local files_changed, added, removed = out.stdout:match(".-(%d+).-(%d+).-(%d+)")
+			files_changed = files_changed or 0
+			added = added or 0
+			removed = removed or 0
 
 			self.data = {
 				files_changed = files_changed,
