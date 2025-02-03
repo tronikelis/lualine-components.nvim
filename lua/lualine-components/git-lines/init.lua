@@ -47,6 +47,10 @@ function M:parse_git_diff()
 			end
 
 			local files_changed, added, removed = out.stdout:match(".-(%d+)%D+(%d+)%D*(%d*)")
+
+			if removed == "" then
+				removed = nil
+			end
 			files_changed = tonumber(files_changed or 0)
 			added = tonumber(added or 0)
 			removed = tonumber(removed or 0)
