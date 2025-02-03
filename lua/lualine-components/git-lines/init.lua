@@ -37,7 +37,6 @@ function M:parse_git_diff()
 			"diff",
 			"--shortstat",
 			"--no-color",
-			"--no-ext-diff",
 			unpack(self.options.diff_args),
 		},
 		{},
@@ -47,7 +46,7 @@ function M:parse_git_diff()
 				return
 			end
 
-			local files_changed, added, removed = out.stdout:match(".-(%d+).-(%d+).-(%d+)")
+			local files_changed, added, removed = out.stdout:match(".-(%d+)%D+(%d+)%D+(%d+)")
 			files_changed = tonumber(files_changed or 0)
 			added = tonumber(added or 0)
 			removed = tonumber(removed or 0)
