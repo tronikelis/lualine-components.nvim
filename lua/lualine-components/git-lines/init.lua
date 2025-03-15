@@ -103,7 +103,7 @@ function M:init(options)
 	self.running = false
 
 	self:parse_git_diff()
-	vim.api.nvim_create_autocmd({ "FocusGained", "BufWritePost", "DirChanged" }, {
+	vim.api.nvim_create_autocmd({ "FocusGained", "BufWritePost", "DirChanged", "BufReadPost" }, {
 		callback = function()
 			self:parse_git_diff()
 		end,

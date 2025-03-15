@@ -31,7 +31,7 @@ function M:parse_git_status()
 			local statuses = vim.tbl_keys(status_map)
 			table.sort(statuses)
 
-			self.prompt = vim.fn.join(statuses, "")
+			self.prompt = string.format("%s %d", table.concat(statuses, ""), #lines)
 		end)
 	)
 end
@@ -48,7 +48,7 @@ function M:init(options)
 	self.running = false
 
 	self:parse_git_status()
-	vim.api.nvim_create_autocmd({ "FocusGained", "BufWritePost", "DirChanged" }, {
+	vim.api.nvim_create_autocmd({ "FocusGained", "BufWritePost", "DirChanged", "BufReadPost" }, {
 		callback = function()
 			self:parse_git_status()
 		end,
