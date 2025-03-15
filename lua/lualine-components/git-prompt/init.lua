@@ -13,25 +13,31 @@ function M:parse_git_status()
 			self.running = false
 
 			if not out.stdout then
+				self.prompt = ""
 				return
 			end
 
 			local status_map = {}
 
 			local lines = vim.split(out.stdout, "\n", { trimempty = true })
-			for _, line in ipairs(lines) do
-				line = vim.trim(line)
-				line = vim.split(line, " ", { trimempty = true })[1]
+			if #lines ~= 0 then
+				for _, line in ipairs(lines) do
+					line = vim.trim(line)
+					line = vim.split(line, " ", { trimempty = true })[1]
 
-				for _, status in ipairs(vim.split(line, "", { trimempty = true })) do
-					status_map[status] = true
+					for _, status in ipairs(vim.split(line, "", { trimempty = true })) do
+						status_map[status] = true
+					end
 				end
+
+				local statuses = vim.tbl_keys(status_map)
+				table.sort(statuses)
+
+				self.prompt = string.format("%s %d", table.concat(statuses, ""), #lines)
+				return
 			end
 
-			local statuses = vim.tbl_keys(status_map)
-			table.sort(statuses)
-
-			self.prompt = string.format("%s %d", table.concat(statuses, ""), #lines)
+			self.prompt = ""
 		end)
 	)
 end
