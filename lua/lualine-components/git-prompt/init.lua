@@ -33,7 +33,7 @@ function M:parse_git_status()
 				local statuses = vim.tbl_keys(status_map)
 				table.sort(statuses)
 
-				self.prompt = string.format("%s %d", table.concat(statuses, ""), #lines)
+				self.prompt = string.format("%s%d", table.concat(statuses, ""), #lines)
 				return
 			end
 
